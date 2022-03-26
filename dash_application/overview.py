@@ -38,9 +38,7 @@ def get_kpi1_data():
             priority.append(element['priority'])
 
     df = pd.DataFrame({'Months': months, 'Data': data, 'Color': priority})
-    return df
 
-def render_kpi1(df):
     return html.Div(
         children=[
             dcc.Graph(

@@ -13,9 +13,13 @@ flask-migrate = "*"
 flask-login = "*"
 dash = "*"
 pandas = "*"
-urllib3 = "*"
+requests = "*"
+matplotlib = "*"
+dash-bootstrap-components = "*"
+gunicorn = "*"
 
 [dev-packages]
+bandit = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"

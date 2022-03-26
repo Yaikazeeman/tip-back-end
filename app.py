@@ -26,7 +26,7 @@ migrate = Migrate(app, db)
 login = LoginManager()
 login.init_app(app)
 create_dash_application(app)
-server = create_dash_application(app).server
+# server = create_dash_application(app)
 
 
 
