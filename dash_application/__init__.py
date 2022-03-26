@@ -3,7 +3,6 @@ from email.utils import decode_rfc2231
 import json
 from urllib.request import urlopen
 import dash
-from dash import Dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
@@ -11,7 +10,9 @@ from flask_login.utils import login_required
 import plotly.express as px
 import pandas as pd
 from urllib import response
-from datetime import datetime
+from datetime import datetime;
+# from overview import render_kpi1, get_kpi1_data
+
 
 
 def sort_by_month(d):
@@ -26,21 +27,26 @@ monthly_raised_sorted = sorted(monthly_raised, key=sort_by_month)
 
 months = []
 data = []
+priority = []
 for element in monthly_raised_sorted:
     if element['month'] == '202101':
-        months.append('Januari')
+        months.append('January')
         data.append(element['incidences_number'])
+        priority.append(element['priority'])
     elif element['month'] == '202102':
         months.append('February')
         data.append(element['incidences_number'])
+        priority.append(element['priority'])
     elif element['month'] == '202103':
         months.append('March')
         data.append(element['incidences_number'])
+        priority.append(element['priority'])
     elif element['month'] == '202104':
         months.append('April')
         data.append(element['incidences_number'])
+        priority.append(element['priority'])
 
-df = pd.DataFrame({'Months': months, 'Data': data})
+df = pd.DataFrame({'Months': months, 'Data': data, 'Color': priority})
 #####################################
 
 url_ms = "https://ge81ee28f924217-db202201141801.adb.eu-amsterdam-1.oraclecloudapps.com/ords/tip/kpi2/incsolved/"
@@ -66,6 +72,35 @@ for element in monthly_solved_sorted:
         data_ms.append(element['incidences_code'])
 
 df_ms = pd.DataFrame({'Months': month_ms, 'Data': data_ms})
+
+############################
+url_3 = "https://ge81ee28f924217-db202201141801.adb.eu-amsterdam-1.oraclecloudapps.com/ords/tip/kpi3/inccrit/"
+response = urlopen(url_3)
+monthly_raised_3 = json.loads(response.read())['items']
+monthly_raised_sorted_3 = sorted(monthly_raised_3, key=sort_by_month)
+
+months_3 = []
+data_3 = []
+priority_3 = []
+for element in monthly_raised_sorted_3:
+    if element['month'] == '2021-01':
+        months_3.append('January')
+        data_3.append(element['incidenct_code'])
+        priority_3.append(element['priority'])
+    elif element['month'] == '2021-02':
+        months_3.append('February')
+        data_3.append(element['incidenct_code'])
+        priority_3.append(element['priority'])
+    elif element['month'] == '2021-03':
+        months_3.append('March')
+        data_3.append(element['incidenct_code'])
+        priority_3.append(element['priority'])
+    elif element['month'] == '2021-04':
+        months_3.append('April')
+        data_3.append(element['incidenct_code'])
+        priority_3.append(element['priority'])
+
+df_3 = pd.DataFrame({'Months': months_3, 'Data': data_3, 'Priority': priority_3})
 
 #############################
 
@@ -108,15 +143,9 @@ df_sla = pd.DataFrame({'INC': not_meeting_sla_id, 'Minutes': not_meeting_sla})
 def render_kpi1():
     return html.Div(
         children=[
-            html.H1(children="KPI 1"),
-            html.Div(
-                children="""
-            INC raised by month
-        """
-            ),
             dcc.Graph(
                 id="example-graph",
-                figure=px.bar(df, x="Months", y="Data", barmode="group"),
+                figure=px.bar(df, x="Months", y="Data", color="Color",  barmode="group"),
             
             ),
         ]
@@ -125,46 +154,75 @@ def render_kpi1():
 def render_kpi2():
     return html.Div(
         children=[
-            html.H1(children="KPI 2"),
             html.Div(
-                children="""
-            INC closed by month
-        """
+                children=[
+                    
+                ]
             ),
+            html.Div(
+                children=[
+                    dcc.Graph(
+                        id="example-graph",
+                        figure=px.bar(df_ms, x="Months", y="Data", barmode="group"),
+                    ),
+                ]
+            )
+
+        ], className="kpi-container"
+    )
+
+def render_kpi3():
+    return html.Div(
+        children=[
             dcc.Graph(
                 id="example-graph",
-                figure=px.bar(df_ms, x="Months", y="Data", barmode="group"),
+                figure=px.bar(df_3, x="Months", y="Data", color="Priority",  barmode="group"),
             
             ),
         ]
     )
 
 def render_kpi5():
-    return  html.Div(children=[html.H1(children="KPI 5"),
-            html.Div(
-                children="""
-            Not meeting SLA
-        """
-            ),
-            dcc.Graph(
-                id="example-graph",
-                figure=px.bar(df_sla, x="INC", y="Minutes", barmode="group"),
-            
-            ),
-            html.Div(
-                children=[
-                    html.P(children="Number of P1 not meeting SLA"),
-                    html.H3(children=len(not_meeting_sla)),
-                    html.P(children="Percentage of P1 not meeting SLA"),
-                    html.H3(children=str(percentage_not_SLA) + "%"),
-                    html.P(children="Total of P1 incidence"),
-                    html.H3(children=len(INC_ID_arr)),
-                    html.P(children="average time in minutes not meeting SLA"),
-                    html.H3(children=average_time_not_meeting),
-                    html.P(children="average time in minutes meeting SLA"),
-                    html.H3(children=average_time_meeting)
-                ]
-            )])
+    return  html.Div(children=[
+                html.Div(children=[
+                    html.Div(
+                        children=[
+                            html.Div(children=[
+                                html.P(children="Number of P1 not meeting SLA"),
+                                html.H3(children=len(not_meeting_sla))
+                            ]),
+                            html.Div(children=[
+                                html.P(children="Percentage of P1 not meeting SLA"),
+                                html.H3(children=str(percentage_not_SLA) + "%")
+                            ]),
+                            html.Div(children=[
+                                html.P(children="Total of P1 incidence"),
+                                html.H3(children=len(INC_ID_arr))
+                            ]),
+                            html.Div(children=[
+                                html.P(children="Total of P1 incidence"),
+                                html.H3(children=len(INC_ID_arr))
+                            ]),
+                            html.Div(children=[
+                                html.P(children="average time in minutes not meeting SLA"),
+                                html.H3(children=average_time_not_meeting),
+                            ]),
+                            html.Div(children=[
+                                html.P(children="average time in minutes meeting SLA"),
+                                html.H3(children=average_time_meeting)
+                            ])
+                       ], className="sla_container"
+                    ),
+                    dcc.Graph(
+                        id="sla-graph",
+                        figure=px.bar(df_sla, x="INC", y="Minutes", barmode="group"),
+                    
+                    )
+                ], className="sla-page")
+            ])
+
+
+
 
 def create_dash_application(flask_app):
     dash_app = dash.Dash(server=flask_app, name="__name__" , url_base_pathname="/dash/")
@@ -176,7 +234,7 @@ def create_dash_application(flask_app):
         elif tab == 'tab-2':
             return render_kpi2()
         elif tab == 'tab-3':
-            return "no kpi3 yet"
+            return render_kpi3()
         elif tab == 'tab-4':
             return render_kpi5()
 
@@ -184,51 +242,53 @@ def create_dash_application(flask_app):
     dash_app.layout = html.Div( 
         children=[
             html.Div(children=[
-                html.H1("IBERIA Dashboard", style={'textAlign': 'center', 'color': 'white'})
-            ], style={'margin': 0 , "padding": "1%" , 'background-color': "#D7192D" }),
+                html.Img(src="./assets/logo-iberia.svg"),
+                 html.H1("IBERIA Dashboard", className="header-text"),
+                html.A(children="Logout", href="/logout" ,className="logout")
+            ], className="header"),
             html.Div(children=[
                 html.Div(children=[
                     dcc.Tabs(
-                        id="tabs",
+                        id="tabs", 
                         value='tab-1',
                         parent_className='custom-tabs',
                         className='custom-tabs-container',
-                        children=[
+                        children=[ 
                             dcc.Tab(
-                                label='KPI 1',
+                                label='Overview',
                                 value='tab-1',
                                 className='custom-tab',
                                 selected_className='custom-tab--selected'
                             ),
                             dcc.Tab(  
-                                label='KPI 2',
+                                label='INC. Raised',
                                 value='tab-2',
                                 className='custom-tab',
                                 selected_className='custom-tab--selected'
                             ),
                             dcc.Tab(
-                                label='KPI 3',
+                                label='INC. Backlog',
                                 value='tab-3', className='custom-tab',
                                 selected_className='custom-tab--selected'
                             ),
                             dcc.Tab(
-                                label='KPI 4',
+                                label='SLA',
                                 value='tab-4',
                                 className='custom-tab',
                                 selected_className='custom-tab--selected'
                             ),
                         ]
                     ),
-                ], style={'width': '70%'}),
+                ],className="tabs-container"),
                 html.Div(children=[
                     html.Label('Select Month'),
                     dcc.Dropdown(['January', 'February', 'March', 'April'], 'January' )
-                    ], style={'width': '20%'}
+                    ], className='dropdown'
                 )
-            ], style={'display': 'flex', 'justify-content': 'space-between'}),
+            ], className="tabs-outer-container"),
 
             html.Div(id='tabs-content-classes')
-        ], style={"margin": 0}
+        ], className="dashboard-page"
     )
 
 

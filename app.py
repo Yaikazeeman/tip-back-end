@@ -17,6 +17,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from dash_application import create_dash_application
 
 app = Flask(__name__)
+app.static_folder = 'static'
 app.config["SECRET_KEY"] = "THIS IS A SECRET, DON'T DO THIS!"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sqlite.db"
 Bootstrap(app)
@@ -25,6 +26,7 @@ migrate = Migrate(app, db)
 login = LoginManager()
 login.init_app(app)
 create_dash_application(app)
+server = create_dash_application(app).server
 
 
 
@@ -45,14 +47,14 @@ class LoginForm(FlaskForm):
 
 
 class RegisterForm(FlaskForm):
-    email = StringField("email", validators=[Email()])
-    password = PasswordField("password", validators=[Length(min=5)])
-    repeat_password = PasswordField("repated_password", validators=[Length(min=5)])
+    email = StringField("Email", validators=[Email()])
+    password = PasswordField("Password", validators=[Length(min=5)])
+    repeat_password = PasswordField("Repated_password", validators=[Length(min=5)])
 
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return redirect(url_for("login"))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -64,14 +66,14 @@ def login():
         if check_password_hash(user.password, form.password.data):
             login_user(user)
 
-            return redirect(url_for("index"))
+            return redirect(url_for("/dash/"))
 
     return render_template("login.html", form=form)
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    form = RegisterForm()
+    form = RegisterForm() 
 
     if form.validate_on_submit() and form.password.data == form.repeat_password.data:
         user = User(
@@ -81,7 +83,7 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        return redirect(url_for("index"))
+        return redirect(url_for("login"))
 
     return render_template("register.html", form=form)
 
@@ -89,7 +91,7 @@ def register():
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for("login"))
 
 if __name__ == "__main__":
     app.run(debug=True)
