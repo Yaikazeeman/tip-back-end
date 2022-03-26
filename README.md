@@ -1,3 +1,3 @@
-# Dash on Flask
+# Term intergration project
 
-this repository demonstrates how Dash can be integrated into flask.
+Dashboard project for Iberia using Flask and Dash
