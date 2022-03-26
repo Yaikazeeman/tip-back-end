@@ -11,7 +11,7 @@ import plotly.express as px
 import pandas as pd
 from urllib import response
 from datetime import datetime;
-from dash_application import overview, solved, raised, SLA, backlog
+from dash_application import overview, solved, SLA, backlog
 
 
 def create_dash_application(flask_app):
@@ -19,9 +19,7 @@ def create_dash_application(flask_app):
 
     @dash_app.callback(Output('tabs-content-classes', 'children'),Input('tabs', 'value'))
     def render_content(tab):
-        if tab == 'tab-1':
-            return overview.get_kpi1_data()
-        elif tab == 'tab-2':
+        if  tab == 'tab-2':
             return overview.get_kpi1_data()
         elif tab == 'tab-3':
             return solved.render_kpi3(solved.get_kpi3_data()) 
@@ -42,16 +40,10 @@ def create_dash_application(flask_app):
                 html.Div(children=[
                     dcc.Tabs(
                         id="tabs", 
-                        value='tab-1',
+                        value='tab-2',
                         parent_className='custom-tabs',
                         className='custom-tabs-container',
                         children=[ 
-                            dcc.Tab(
-                                label='Overview',
-                                value='tab-1',
-                                className='custom-tab',
-                                selected_className='custom-tab--selected'
-                            ),
                             dcc.Tab(  
                                 label='INC. Raised',
                                 value='tab-2',

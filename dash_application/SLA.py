@@ -47,36 +47,49 @@ def render_SLA():
             html.Div(children=[
                 html.Div(
                     children=[
-                        html.Div(children=[
-                            html.P(children="Number of P1 not meeting SLA"),
-                            html.H3(children=len(not_meeting_sla))
-                        ]),
-                        html.Div(children=[
-                            html.P(children="Percentage of P1 not meeting SLA"),
-                            html.H3(children=str(percentage_not_SLA) + "%")
-                        ]),
-                        html.Div(children=[
-                            html.P(children="Total of P1 incidence"),
-                            html.H3(children=len(INC_ID_arr))
-                        ]),
-                        html.Div(children=[
-                            html.P(children="Total of P1 incidence"),
-                            html.H3(children=len(INC_ID_arr))
-                        ]),
-                        html.Div(children=[
-                            html.P(children="average time in minutes not meeting SLA"),
-                            html.H3(children=average_time_not_meeting),
-                        ]),
-                        html.Div(children=[
-                            html.P(children="average time in minutes meeting SLA"),
-                            html.H3(children=average_time_meeting)
-                        ])
+                        html.Div(
+                            children=[
+                                html.Div(children=[
+                                    html.P(children="# P1 not meeting SLA"),
+                                    html.H3(children=len(not_meeting_sla))
+                                ]),
+                                html.Div(children=[
+                                    html.P(children="# P1 meeting SLA"),
+                                    html.H3(children=len(meeting_sla))
+                                ])
+                            ]),
+                            html.Div(
+                                children=[
+                                    html.Div(children=[
+                                            html.P(children="% P1 not meeting SLA"),
+                                            html.H3(children=str(percentage_not_SLA) + "%")
+                                        ]),
+                                    html.Div(children=[
+                                        html.P(children="Total P1 Inc."),
+                                        html.H3(children=len(INC_ID_arr))
+                                    ]),
+                                ]),
+                            html.Div(
+                                children=[
+                                    html.Div(children=[
+                                        html.P(children="Average time not meeting SLA"),
+                                        html.H3(children=str(average_time_not_meeting)  + " Minutes"),
+                                    ]),
+                                    html.Div(children=[
+                                        html.P(children="Average time meeting SLA"),
+                                        html.H3(children=str(average_time_meeting) + " Minutes")
+                                    ])
+                                ])
                     ], className="sla_container"
                 ),
-                dcc.Graph(
-                    id="sla-graph",
-                    figure=px.bar(df_sla, x="INC", y="Minutes", barmode="group"),
-                
-                )
+                html.Div(children=[
+                    html.H2(children="Resolution time for Inc. not meeting SLA"),
+                    dcc.Graph(
+                        id="sla-graph",
+                        figure=px.bar(df_sla, x="INC", y="Minutes", barmode="group"),
+                    
+                    )
+                ], className="graph-sla-div")
+
             ], className="sla-page")
         ])

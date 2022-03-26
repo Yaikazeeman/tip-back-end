@@ -47,33 +47,134 @@ body{
     justify-content: space-between;
 }
 
-.kpi-container{
+
+/* Overview page */
+
+.overview-page{
     display: flex;
-    justify-content: space-between;
-    margin: 1%;
+    justify-content: space-around;
+    height: 80%;
 }
+
+.overview-div div{
+    flex-direction: column;
+    justify-content: center;
+    -webkit-box-shadow: 2px 3px 18px -4px rgba(0,0,0,0.4); 
+    box-shadow: 2px 3px 18px -4px rgba(0,0,0,0.4);
+    border-radius: 20px;
+    padding: 2% 5%;
+    margin: 5%;
+    width: 80%
+}
+
+.overview-div div p{
+    text-align: center;
+    font-weight: 2em;
+}
+
+.overview-div div h3{
+    text-align: center;
+    font-weight: 2em;
+}
+
+.overview-div{
+    margin: 8% 0 0 0 ;
+    width: 30%;
+}
+
+#first-graph{
+    width: 45%;
+    height: 30%;
+    border-radius: 10px;
+    -webkit-box-shadow: 2px 3px 18px -4px rgba(0,0,0,0.4); 
+    box-shadow: 2px 3px 18px -4px rgba(0,0,0,0.4);
+    margin: 2%;
+}
+
+/* closed page */
+
+.kpi-container{
+    width: 90%;
+    margin: 1% 5%;
+}
+
+.kpi-container div{
+    width: 90%;
+}
+
+#closed-graph{
+    margin: 2%;
+    border-radius: 10px;
+    -webkit-box-shadow: 2px 3px 18px -4px rgba(0,0,0,0.4); 
+    box-shadow: 2px 3px 18px -4px rgba(0,0,0,0.4);
+}
+
+/* Backlog page */
+
+#backlog-graph{
+    width: 80%;
+    height: 30%;
+    border-radius: 10px;
+    -webkit-box-shadow: 2px 3px 18px -4px rgba(0,0,0,0.4); 
+    box-shadow: 2px 3px 18px -4px rgba(0,0,0,0.4);
+    margin: 2%;
+}
+
+.backlog-page{
+    margin: 0 5%;
+}
+
+/* Sla page */
 
 .sla-page{
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 #sla-graph{
-    width: 60%;
-    height: 40%;
+    width: 90%;
+    height: 100%;
+    margin: 2%;
+    border-radius: 10px;
+    -webkit-box-shadow: 2px 3px 18px -4px rgba(0,0,0,0.4); 
+    box-shadow: 2px 3px 18px -4px rgba(0,0,0,0.4);
+}
+
+.graph-sla-div{
+    width: 50%;
+    height: 30%
 }
 
 .sla_container div{
+    display: flex;
+    justify-content: space-around;
+}
+
+.sla_container div div{
+    flex-direction: column;
+    justify-content: center;
     -webkit-box-shadow: 2px 3px 18px -4px rgba(0,0,0,0.4); 
     box-shadow: 2px 3px 18px -4px rgba(0,0,0,0.4);
     border-radius: 20px;
-    padding: 1em;
-    margin: 1em;
+    padding: 2% 5%;
+    margin: 0.5em 1em;
+    width: 50%
+}
+
+.sla_container div div p{
+    color: gray;
+    text-align: center;
+}
+
+.sla_container div div h3{
+    font-size: 1.5em;
+    text-align: center;
 }
 
 .sla_container{
     margin: 1%;
+    width: 40%;
 }
 
 .modebar{

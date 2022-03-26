@@ -42,10 +42,11 @@ def get_kpi4_data():
 def render_kpi4(df):
     return html.Div(
         children=[
+            html.H2(children="Total Inc. in backlog per priority"),
             dcc.Graph(
-                id="example-graph",
+                id="backlog-graph",
                 figure=px.bar(df, x="Months", y="Data", color="Priority",  barmode="group"),
             
             ),
-        ]
+        ], className="backlog-page"
     )

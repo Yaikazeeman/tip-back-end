@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, json
+from flask import Flask, render_template, redirect, json, request
 from flask.helpers import url_for
 from flask_bootstrap import Bootstrap
 from flask_login.utils import login_required, logout_user
@@ -9,8 +9,9 @@ from flask_login import LoginManager, login_user
 from flask_login.mixins import UserMixin
 
 
+
 from wtforms import StringField, PasswordField
-from wtforms.validators import Length, Email
+from wtforms.validators import Length, Email, EqualTo, InputRequired
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -26,9 +27,8 @@ migrate = Migrate(app, db)
 login = LoginManager()
 login.init_app(app)
 create_dash_application(app)
-# server = create_dash_application(app)
 
-
+ 
 
 @login.user_loader
 def user_loader(user_id):
@@ -42,14 +42,15 @@ class User(db.Model, UserMixin):
 
 
 class LoginForm(FlaskForm):
-    email = StringField("email", validators=[Email()])
-    password = PasswordField("password", validators=[Length(min=5)])
+    email = StringField("Email: ", validators=[Email()])
+    password = PasswordField("Password: ", validators=[Length(min=5)])
 
 
 class RegisterForm(FlaskForm):
-    email = StringField("Email", validators=[Email()])
-    password = PasswordField("Password", validators=[Length(min=5)])
-    repeat_password = PasswordField("Repated_password", validators=[Length(min=5)])
+    email = StringField("Email: ", validators=[Email()])
+    password = PasswordField("Password: ", validators=[Length(min=5)])
+    repeat_password = PasswordField("Repeated password: ", validators=[Length(min=5)])
+    access_code = PasswordField("Access code: ") 
 
 
 @app.route("/")
@@ -75,7 +76,7 @@ def login():
 def register():
     form = RegisterForm() 
 
-    if form.validate_on_submit() and form.password.data == form.repeat_password.data:
+    if form.validate_on_submit() and form.password.data == form.repeat_password.data and form.access_code.data == "54321":
         user = User(
             email=form.email.data, password=generate_password_hash(form.password.data)
         )

@@ -38,19 +38,15 @@ def get_kpi3_data():
 def render_kpi3(df):
     return html.Div(
         children=[
-            html.Div(
-                children=[
-                    
-                ]
-            ),
+            html.H2(children="Total number of Inc. closed per month"),
             html.Div(
                 children=[
                     dcc.Graph(
-                        id="example-graph",
+                        id="closed-graph",
                         figure=px.bar(df, x="Months", y="Data", barmode="group"),
                     ),
                 ]
             )
 
-        ], className="kpi-container"
+        ], className="kpi-container" 
     )

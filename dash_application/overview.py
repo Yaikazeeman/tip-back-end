@@ -37,14 +37,25 @@ def get_kpi1_data():
             data.append(element['incidences_number'])
             priority.append(element['priority'])
 
+    total_count = 0
+    for el in data:
+        total_count += el
+
     df = pd.DataFrame({'Months': months, 'Data': data, 'Color': priority})
 
     return html.Div(
         children=[
+            html.Div(
+                children=[
+                    html.Div(children=[
+                        html.P(children="Total raised"),
+                        html.H3(children=total_count)
+                    ])
+            ], className="overview-div"  ),
             dcc.Graph(
-                id="example-graph",
-                figure=px.bar(df, x="Months", y="Data", color="Color",  barmode="group"),
+                id="first-graph",
+                figure=px.bar(df, x="Months", y="Data", color="Color",  barmode="group")
             
-            ),
-        ]
+            )
+        ], className="overview-page"
     )
